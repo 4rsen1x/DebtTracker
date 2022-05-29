@@ -12,14 +12,12 @@ namespace DebtTracker
         public string FromWho { get; set; }
         public string ToWhom { get; set; }
         public string Time { get; set; }
-        public bool IsDone { get; set; }
-        public Debt(string content, string from_who, string to_whom, string time, bool is_done)
+        public Debt(string content, string from_who, string to_whom, string time)
         {
             Content = content;
             FromWho = from_who;
             ToWhom = to_whom;
             Time = time;
-            IsDone = is_done;
         }
 
     }

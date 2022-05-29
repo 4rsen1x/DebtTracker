@@ -48,7 +48,7 @@
                 <ColumnDefinition Width="2*"></ColumnDefinition>-->
                 <ColumnDefinition Width="auto" ></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="Список долгов: " Foreground="GhostWhite" FontSize="23" Margin="7,7,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.ColumnSpan="5" Width="710"/>
+            <TextBlock x:Name="debt_tb" Text="Список долгов: " Foreground="GhostWhite" FontSize="23" Margin="7,7,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.ColumnSpan="5" Width="710"/>
             <ListBox x:Name="Debts_listbox" VerticalAlignment="Top" Height="auto" Grid.Row="2" Grid.ColumnSpan="5" PreviewMouseDown="ListBox_PreviewMouseDown">
                 <ListBox.ItemTemplate>
                     <DataTemplate>

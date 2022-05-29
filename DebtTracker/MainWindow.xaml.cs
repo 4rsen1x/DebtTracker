@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.IO;
+using Microsoft.Win32;
 
 namespace DebtTracker
 {
@@ -25,19 +27,53 @@ namespace DebtTracker
         {
             InitializeComponent();
             loadDebts();
+            Closing += saveDebts;
         }
         List<Debt> listOfDebts = new List<Debt>();
+
+        void saveDebts(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            File.WriteAllText(@"db.txt", "");
+            TextWriter tw = new StreamWriter(@"db.txt");
+            foreach (Debt debt in listOfDebts)
+            {
+                tw.WriteLine($"{debt.Content};{debt.FromWho};{debt.ToWhom};{debt.Time}");
+            }
+            tw.Close();
+        }
+
+        private Debt getDebt(string content, string from_who, string to_whom, string time)
+        {
+            Debt new_debt = new Debt(content, from_who, to_whom, time);
+            return new_debt;
+        }
+
         private void loadDebts()
         {
-            Debt first_debt = new Debt("100р", "Я", "ему", "завтра", false);
-            Debt second_debt = new Debt("200р", "Я", "ему", "завтра", false);
-            
-            listOfDebts.Add(first_debt);
-            listOfDebts.Add(second_debt);
+            string[] lines = File.ReadAllLines(@"db.txt");
+            char[] sep = { ';' };
+            foreach (string line in lines)
+            {
+                string[] split_lines = line.Split(sep);
+                Debt loaded_debt = getDebt(split_lines[0], split_lines[1], split_lines[2], split_lines[3]);
+                listOfDebts.Add(loaded_debt);
+            }
             refresh_listbox();
+        }
+        private void refresh_debt_tb()
+        {
+            if (listOfDebts.Count == 0)
+            {
+                debt_tb.Text = "Никаких долгов!";
+            }
+            else
+            {
+                debt_tb.Text = "Список долгов: ";
+            }
         }
         private void refresh_listbox()
         {
+            refresh_debt_tb();
             Debts_listbox.Items.Clear();
             foreach (Debt debt in listOfDebts)
             {
@@ -46,7 +82,7 @@ namespace DebtTracker
         }
         public void addNewDebt(string content, string from_who, string to_whom, string time)
         {
-            Debt new_debt = new Debt(content, from_who, to_whom, time, false);
+            Debt new_debt = new Debt(content, from_who, to_whom, time);
             listOfDebts.Add(new_debt);
             refresh_listbox();
             
